@@ -1,0 +1,31 @@
+{
+  "name": "coffee-paste",
+  "main": "./lib/coffee-paste",
+  "version": "0.0.1",
+  "description": "Copy/Paste As > Js ➤ Coffee / Coffee ➤ Js",
+  "author": {
+    "name": "Prince John Wesley",
+    "email": "princejohhwesley@gmail.com",
+    "url": "www.toolitup.com"
+  },
+  "keywords": [
+    "copy",
+    "paste",
+    "js2coffee",
+    "coffee2js",
+    "clipboard",
+    "convert"
+  ],
+  "activationCommands": {
+    "atom-workspace": [ "coffee-paste:js2Coffee", "coffee-paste:coffee2Js", "coffee-paste:asCoffee", "coffee-paste:asJs" ]
+  },
+  "repository": "https://github.com/princejwesley/coffee-paste",
+  "license": "MIT",
+  "engines": {
+    "atom": ">=1.0.0 <2.0.0"
+  },
+  "dependencies": {
+    "js2coffee": "^2.1.0",
+    "coffee-script": "^1.10.0"
+  }
+}

@@ -1,0 +1,63 @@
+# See https://atom.io/docs/latest/hacking-atom-package-word-count#menus for more details
+'context-menu':
+  'atom-text-editor': [
+    {
+      'label': 'Copy As',
+      'submenu': [
+        {
+          'label': 'Js ➤ Coffee'
+          'command': 'coffee-paste:js2Coffee'
+        },
+        {
+          'label': 'Coffee ➤ Js'
+          'command': 'coffee-paste:coffee2Js'
+        }
+      ]
+    },
+    {
+      'label': 'Paste As',
+      'submenu': [
+        {
+          'label': '(clipboard) Js ➤ Coffee'
+          'command': 'coffee-paste:asCoffee'
+        },
+        {
+          'label': '(clipboard) Coffee ➤ Js'
+          'command': 'coffee-paste:asJs'
+        }
+      ]
+    }
+  ]
+'menu': [
+  {
+    'label': 'Edit'
+    'submenu': [{
+      'label': 'Copy As'
+      'submenu': [
+        {
+          'label': 'Js ➤ Coffee'
+          'command': 'coffee-paste:js2Coffee'
+        },
+        {
+          'label': 'Coffee ➤ Js'
+          'command': 'coffee-paste:coffee2Js'
+        }
+      ]
+    },
+      {
+        'label': 'Paste As',
+        'submenu': [
+          {
+            'label': 'Clipboard ➤ Coffee'
+            'command': 'coffee-paste:asCoffee'
+          },
+          {
+            'label': 'Clipboard ➤ Js'
+            'command': 'coffee-paste:asJs'
+          }
+        ]
+      }
+
+    ]
+  }
+]
