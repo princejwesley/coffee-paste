@@ -1,7 +1,7 @@
 {
   "name": "coffee-paste",
   "main": "./lib/coffee-paste",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Copy/Paste As > Js ➤ Coffee / Coffee ➤ Js",
   "author": {
     "name": "Prince John Wesley",
@@ -17,7 +17,12 @@
     "convert"
   ],
   "activationCommands": {
-    "atom-workspace": [ "coffee-paste:js2Coffee", "coffee-paste:coffee2Js", "coffee-paste:asCoffee", "coffee-paste:asJs" ]
+    "atom-workspace": [
+      "coffee-paste:js2Coffee",
+      "coffee-paste:coffee2Js",
+      "coffee-paste:asCoffee",
+      "coffee-paste:asJs"
+    ]
   },
   "repository": "https://github.com/princejwesley/coffee-paste",
   "license": "MIT",
