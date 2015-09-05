@@ -2,7 +2,7 @@
   "name": "coffee-paste",
   "main": "./lib/coffee-paste",
   "version": "0.1.0",
-  "description": "Copy/Paste As > Js ➤ Coffee / Coffee ➤ Js",
+  "description": "Copy/Paste As : Js ➤ Coffee / Coffee ➤ Js",
   "author": {
     "name": "Prince John Wesley",
     "email": "princejohhwesley@gmail.com",
@@ -14,6 +14,8 @@
     "js2coffee",
     "coffee2js",
     "clipboard",
+    "coffeescript",
+    "javascript",
     "convert"
   ],
   "activationCommands": {

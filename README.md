@@ -1,8 +1,11 @@
 # coffee-paste package
 
-Copy/Paste JS code as Coffee Script and vice versa.
+Atom package for `Copy/Paste As` : `Js ➤ Coffee` / `Coffee ➤ Js`.
 
-![coffee-paste](https://gist.githubusercontent.com/princejwesley/d9ac53414f4bd542f326/raw/76e48226d02929ce19d220883d8211103c58e3af/coffee-paste.gif)
+ * Copy Js code to clipboard as coffee script and vice versa.
+ * Paste clipboard Js code as coffee script and vice versa.
+
+![coffee-paste](https://gist.githubusercontent.com/princejwesley/d9ac53414f4bd542f326/raw/cd487137e446bbfdeeed04531ce71be8e7720cc1/coffee-paste.gif)
 
 ## Install
 ```sh
