@@ -38,7 +38,7 @@ module.exports =
 
     @nodePath = "#{process.env.PATH}"
     if not atom.config.get('coffee-paste.nodePath')
-      if process.plateform isnt 'win32'
+      if process.platform isnt 'win32'
         # try this for unix
         @nodePath = [@nodePath, '/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter)
     else
@@ -46,7 +46,7 @@ module.exports =
       @nodePath = "#{atom.config.get('coffee-paste.nodePath')}#{path.delimiter}#{@nodePath}"
 
     # find node
-    if process.plateform isnt 'win32'
+    if process.platform isnt 'win32'
       type = exec 'type node', { env: { PATH: @nodePath }} , (error, stdout, stderr) =>
         @hasPathSet = if error then false else true
 
@@ -129,9 +129,14 @@ module.exports =
     output.split(EOL).splice(1).join(EOL)
 
   pathSet: ->
-    @reportError {
-      description: 'Configure node path'
-    }, @noNodeMessage unless @hasPathSet
+    if not atom.config.get('coffee-paste.nodePath') and not @hasPathSet
+      @reportError {
+        description: 'Configure node path'
+      }, @noNodeMessage
+    else
+      @nodePath = "#{atom.config.get('coffee-paste.nodePath')}#{path.delimiter}#{@nodePath}"
+      @hasPathSet = true
+
     @hasPathSet
 
   readClipboard: ->
