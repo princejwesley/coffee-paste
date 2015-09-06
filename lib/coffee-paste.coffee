@@ -1,6 +1,6 @@
 {CompositeDisposable} = require 'atom'
 js2coffee = require 'js2coffee'
-{spawn} = require 'child_process'
+{spawn, exec} = require 'child_process'
 path = require 'path'
 {EOL} = require 'os'
 
@@ -38,11 +38,7 @@ module.exports =
 
     @nodePath = "#{process.env.PATH}"
     if not atom.config.get('coffee-paste.nodePath')
-      if process.plateform is 'win32'
-        @reportError {
-          description: 'Configure node path'
-        }, @noNodeMessage
-      else
+      if process.plateform isnt 'win32'
         # try this for unix
         @nodePath = [@nodePath, '/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter)
     else
@@ -51,21 +47,14 @@ module.exports =
 
     # find node
     if process.plateform isnt 'win32'
-      @hasPathSet = true
-      type = spawn 'type', ['node'], { env: { PATH: @nodePath }}
-      type.stderr.on 'data', (data) =>
-        @hasPathSet = false
-        @reportError {
-          description: 'Configure node path'
-        }, @noNodeMessage
-        type.stdin.end()
+      type = exec 'type node', { env: { PATH: @nodePath }} , (error, stdout, stderr) =>
+        @hasPathSet = if error then false else true
 
 
   deactivate: ->
     @subscriptions.dispose()
 
   asCoffee: ->
-    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readClipboard()
 
@@ -73,7 +62,7 @@ module.exports =
       {code} = js2coffee.build content, { indent: editor.getTabLength() || 2 }
       editor.setTextInBufferRange editor.getSelectedBufferRange(), code
     catch e
-      @reportError e
+      @reportError { description: 'Paste Error' }, { detail: e.message }
 
   asJs: ->
     return unless @pathSet()
@@ -92,14 +81,13 @@ module.exports =
     child.stdout.on 'data', (code) =>
       editor.setTextInBufferRange editor.getSelectedBufferRange(), @coffeeExeOutputAsString(code)
 
-    child.stderr.on 'data', (error) ->
-      @reportError new Buffer(error.toJSON()).toString()
+    child.stderr.on 'data', (error) =>
+      @reportError { description: 'Paste Error' }, { detail: new Buffer(error.toJSON()).toString() }
 
     child.stdin.end();
 
 
   js2Coffee: ->
-    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readBuffer editor
 
@@ -107,7 +95,7 @@ module.exports =
       {code} = js2coffee.build content, { indent: editor.getTabLength() || 2 }
       atom.clipboard.write code
     catch e
-      @reportError e
+      @reportError { description: 'Copy Error' }, { detail: e.message }
 
 
   reportError: (e, options) ->
@@ -130,8 +118,8 @@ module.exports =
     child.stdout.on 'data', (code) =>
       atom.clipboard.write @coffeeExeOutputAsString code
 
-    child.stderr.on 'data', (error) ->
-      @reportError new Buffer(error.toJSON()).toString()
+    child.stderr.on 'data', (error) =>
+      @reportError { description: 'Copy Error' }, { detail: new Buffer(error.toJSON()).toString() }
 
     child.stdin.end()
 
