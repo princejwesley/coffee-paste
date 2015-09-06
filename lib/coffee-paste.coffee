@@ -30,18 +30,26 @@ module.exports =
       "coffee"
     ].join "#{path.sep}"
 
-    @nodePath = atom.config.get('coffee-paste.nodePath')
-    if not @nodePath and process.plateform isnt 'win32'
-      @nodePath = ['/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter) #try this!!!
+    @nodePath = "#{process.env.PATH}"
+    if not atom.config.get('coffee-paste.nodePath')
+      if process.plateform is 'win32'
+        @reportError {
+          description: 'Configure node path'
+        }
+      else
+        # try this for unix
+        @nodePath = [@nodePath, '/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter)
+    else
+      @nodePath = "#{atom.config.get('coffee-paste.nodePath')}#{path.delimiter}#{@nodePath}"
 
-    @nodePath = "#{@nodePath}#{path.delimiter}#{process.env.PATH}"
-
-    type = spawn 'type', ['node'], { env: { PATH: @nodePath }}
-    type.stderr.on 'data', (data) ->
-      @reportError {
-        description: 'Configure node path'
-      }
-    type.stdin.end()
+    # find node
+    if process.plateform isnt 'win32'
+      type = spawn 'type', ['node'], { env: { PATH: @nodePath }}
+      type.stderr.on 'data', (data) ->
+        @reportError {
+          description: 'Configure node path'
+        }
+        type.stdin.end()
 
 
   deactivate: ->
