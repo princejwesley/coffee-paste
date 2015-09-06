@@ -12,6 +12,12 @@ module.exports =
   subscriptions: null
   coffeeExe: null
   nodePath: ''
+  noNodeMessage:
+    detail:"""
+      "coffee-paste":
+        nodePath: "installed-node-path-here"
+      """
+  hasPathSet: false
 
   activate: (state) ->
     @subscriptions = new CompositeDisposable
@@ -35,20 +41,23 @@ module.exports =
       if process.plateform is 'win32'
         @reportError {
           description: 'Configure node path'
-        }
+        }, @noNodeMessage
       else
         # try this for unix
         @nodePath = [@nodePath, '/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter)
     else
+      @hasPathSet = true
       @nodePath = "#{atom.config.get('coffee-paste.nodePath')}#{path.delimiter}#{@nodePath}"
 
     # find node
     if process.plateform isnt 'win32'
+      @hasPathSet = true
       type = spawn 'type', ['node'], { env: { PATH: @nodePath }}
-      type.stderr.on 'data', (data) ->
+      type.stderr.on 'data', (data) =>
+        @hasPathSet = false
         @reportError {
           description: 'Configure node path'
-        }
+        }, @noNodeMessage
         type.stdin.end()
 
 
@@ -56,6 +65,7 @@ module.exports =
     @subscriptions.dispose()
 
   asCoffee: ->
+    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readClipboard()
 
@@ -66,6 +76,7 @@ module.exports =
       @reportError e
 
   asJs: ->
+    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readClipboard()
 
@@ -88,6 +99,7 @@ module.exports =
 
 
   js2Coffee: ->
+    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readBuffer editor
 
@@ -98,10 +110,11 @@ module.exports =
       @reportError e
 
 
-  reportError: (e) ->
-    atom.notifications.addError "[coffee-paste] #{e.description}"
+  reportError: (e, options) ->
+    atom.notifications.addError "[coffee-paste] #{e.description}", options
 
   coffee2Js: ->
+    return unless @pathSet()
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readBuffer editor
 
@@ -127,6 +140,11 @@ module.exports =
     output = new Buffer(buffer.toJSON()).toString()
     output.split(EOL).splice(1).join(EOL)
 
+  pathSet: ->
+    @reportError {
+      description: 'Configure node path'
+    }, @noNodeMessage unless @hasPathSet
+    @hasPathSet
 
   readClipboard: ->
     atom.clipboard.read()
