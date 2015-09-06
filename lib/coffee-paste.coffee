@@ -34,7 +34,7 @@ module.exports =
     if not @nodePath and process.plateform isnt 'win32'
       @nodePath = ['/usr/local/bin', '/usr/local/sbin' ].join(path.delimiter) #try this!!!
 
-    @nodePath = "#{process.env.PATH}#{path.delimiter}#{@nodePath}"
+    @nodePath = "#{@nodePath}#{path.delimiter}#{process.env.PATH}"
 
     type = spawn 'type', ['node'], { env: { PATH: @nodePath }}
     type.stderr.on 'data', (data) ->
