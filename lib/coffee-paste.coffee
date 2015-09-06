@@ -124,5 +124,4 @@ module.exports =
     atom.clipboard.read()
 
   readBuffer: (editor) ->
-    text = editor.getSelectedText()
     editor.getSelectedText() || editor.getBuffer().cachedText
