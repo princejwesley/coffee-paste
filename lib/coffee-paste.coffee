@@ -69,7 +69,7 @@ module.exports =
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readClipboard()
 
-    child = spawn @coffeeExe, ['-sc'], {
+    child = spawn 'node', [@coffeeExe, '-sc'], {
       env: {
         PATH: "#{@nodePath}"
       }
@@ -106,7 +106,7 @@ module.exports =
     return unless editor = atom.workspace.getActiveTextEditor()
     return unless content = @readBuffer editor
 
-    child = spawn @coffeeExe, ['-sc'], {
+    child = spawn 'node', [@coffeeExe, '-sc'], {
       env: {
         PATH: "#{@nodePath}"
       }
