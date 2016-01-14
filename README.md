@@ -1,5 +1,7 @@
 # coffee-paste package
 
+[![apm](https://img.shields.io/apm/dm/coffee-paste.png)](https://atom.io/packages/coffee-paste)
+
 Atom package for `Copy/Paste As` : `Js ➤ Coffee` / `Coffee ➤ Js`.
 
  * Copy Js code to clipboard as coffee script and vice versa.
